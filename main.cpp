@@ -12,7 +12,7 @@
 #include <thread>
 #include "reservation.h"
 #include "resource.h"
-
+#include "reservationfunctions.h"
 
 using namespace std;
 using namespace std::chrono_literals;
@@ -109,6 +109,8 @@ int main(){
         reservations.push_back(r);
     }
 
+    int resIdIndex = reservations.back().GetReservationId();
+
     //creat vector of resources
     vector<Resource> resources;
 
@@ -126,15 +128,27 @@ int main(){
         resources.push_back(r);
         
     }
-    
+
+    vector<ReservationQueue> reservationQueues;
+
+    for (auto r : resources){
+        vector<IndexReservation> unsortedQueue;
+        FindReservation(reservations, unsortedQueue, r.GetId());
+        ReservationQueue q(unsortedQueue, r);
+        reservationQueues.push_back(q);
+    }
+   
     vector<IndexReservation> foundReservation;
     vector<IndexResource> foundResource;
 
+    CancelationStack cancelations;
 
+    //determines if a reservation has recently been deleted
+    bool canceled = false;
+    int canceledIndex;
 
+    system("cls");
 
-
-    
     cout << "  _____                                _   _                _____           _                 " << endl;
     cout << " |  __ \\                              | | (_)              / ____|         | |                " << endl;
     cout << " | |__) |___  ___  ___ _ ____   ____ _| |_ _  ___  _ __   | (___  _   _ ___| |_ ___ _ __ ___  " << endl;
@@ -165,7 +179,12 @@ int main(){
         cout << "4. Search for a resource" << endl;
         cout << "5. Add a reservation" << endl;
         cout << "6. Cancel a reservation" << endl;
-        cout << "7. Exit the program" << endl;
+        cout << "7. Check a reservation Queue" << endl;
+        cout << "8. Exit the program" << endl;
+        if (canceled){
+            cout << "0. Undo reservation cancelation" << endl;
+        }
+
         int input;
         cin >> input;
         switch (input) {
@@ -181,16 +200,44 @@ int main(){
             case 4:
                 SearchResources(resources, foundResource);
                 break;
-            case 5:
-                cout << "Add a reservation" << endl;
+            case 5:{
+                cout << "Enter resource ID of the resource you want to reserve" << endl;
+                string id;
+                cin >> id;
+                int queueIndex = GetQueueIndex(reservationQueues, id);
+                if (queueIndex == -1) {
+                    cout << "Error: Resource ID not found." << endl;
+                    break;
+                }
+                Reservation added = reservationQueues[queueIndex].AddReservation(resIdIndex);
+                reservations.push_back(added);
                 break;
+            }
             case 6:
-                cout << "Cancel a reservation" << endl;
+                cancelations.Cancel(reservationQueues, reservations, canceledIndex);
+                canceled = true;
                 break;
-            case 7:
+            case 7:{
+                cout << "Enter resource ID: ";
+                string id;
+                cin >> id;
+                vector<IndexReservation> unsortedQueue;
+                FindReservation(reservations, unsortedQueue, id);
+                ReservationQueue q(unsortedQueue);
+                q.DisplayQueue();
+
+                break;
+            }
+            case 8:
                 cout << "Exiting the program." << endl;
                 return 0;
                 break;
+            case 0:
+                if (canceled){
+                    cancelations.Undo(reservationQueues, reservations, canceledIndex);
+                    canceled = false;
+                    break;
+                }
             default:
                 cout << "Invalid input. Please enter a number between 1 and 7." << endl;
     }
