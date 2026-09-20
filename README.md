@@ -14,9 +14,10 @@ A terminal-based reservation management system built in C++ to easily control an
 ## Running the code
 
 The code was built in C++ and compiled using MinGW. It runs on a Windows command prompt
-```diff
+
+[!WARNING]
 - **BUILD FOR WINDOWS** </span>
-```
+
 ## Common Commands
 Uses numbers in the console to control the program. All usable commands are shown in the menu
 
