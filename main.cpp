@@ -44,7 +44,8 @@ void SearchReservations(const list<Reservation>& reservations, vector<IndexReser
     string query;
     int intval;
     cout << "Enter a reservation ID, student ID, student name, resource ID, or date to search for a reservation: ";
-    getline(cin, query);
+    cin.ignore();
+	getline(cin, query);
     stringstream ss(query);
     ss >> intval;
     if (intval > 0 && ss.eof()) {  
@@ -57,7 +58,7 @@ void SearchReservations(const list<Reservation>& reservations, vector<IndexReser
     if (found[0].reservationId != 0) {
         DisplayFoundReservation(found);
     }
-
+	found.clear();
 }
 
 void SearchResources(const vector<Resource>& resources, vector<IndexResource>& found) {
@@ -75,6 +76,7 @@ void SearchResources(const vector<Resource>& resources, vector<IndexResource>& f
     if (found[0].resourceId != "") {
         DisplayFoundResource(found);
     }
+	found.clear();
 }
 
 int main(){
@@ -134,6 +136,9 @@ int main(){
     for (auto r : resources){
         vector<IndexReservation> unsortedQueue;
         FindReservation(reservations, unsortedQueue, r.GetId());
+		if (unsortedQueue.empty()){
+			unsortedQueue.push_back(IndexReservation{0, r.GetId(), "", 0, ""});
+		}
         ReservationQueue q(unsortedQueue, r);
         reservationQueues.push_back(q);
     }
@@ -147,7 +152,7 @@ int main(){
     bool canceled = false;
     int canceledIndex;
 
-    system("cls");
+    //system("cls");
 
     cout << "  _____                                _   _                _____           _                 " << endl;
     cout << " |  __ \\                              | | (_)              / ____|         | |                " << endl;
@@ -203,6 +208,7 @@ int main(){
             case 5:{
                 cout << "Enter resource ID of the resource you want to reserve" << endl;
                 string id;
+				cin.ignore();
                 cin >> id;
                 int queueIndex = GetQueueIndex(reservationQueues, id);
                 if (queueIndex == -1) {
