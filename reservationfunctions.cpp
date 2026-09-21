@@ -186,13 +186,16 @@ return resource;
 }
 
 int GetQueueIndex(const vector<ReservationQueue>& q, string id){
-    int i = 0;
-    for (auto r : q){
-        queue<Reservation> reservations = r.GetQueue();
-        if (!reservations.empty() && reservations.front().GetResourceId() == id){
-            return i;
+    for (size_t i = 0; i < q.size(); ++i) {
+        const queue<Reservation> reservations = q[i].GetQueue();
+
+        if (!reservations.empty() && reservations.front().GetResourceId() == id) {
+            return static_cast<int>(i);
         }
-        i++;
+
+        if (reservations.empty() && q[i].GetResource().GetId() == id) {
+            return static_cast<int>(i);
+        }
     }
     return -1;
 }
