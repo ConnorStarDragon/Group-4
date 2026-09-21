@@ -76,6 +76,7 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
     }
         if (firstFound){
             cout << "Error: Reservation ID not found." << endl;
+			found.push_back(IndexReservation{0, "", "", 0, ""});
         }
     }
     //search using student ID
@@ -99,6 +100,7 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
         }
         if (firstFound){
             cout << "Error: Student ID not found." << endl;
+			found.push_back(IndexReservation{0, "", "", 0, ""});
         }
 
     }
@@ -157,7 +159,7 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
             }
             if (firstFound){
                 cout << "Error: Resource ID not found." << endl;
-                found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
+                found.push_back(IndexReservation{0, query, "", 0, ""}); // Return an empty IndexReservation to indicate not found
             }
 }
     }
