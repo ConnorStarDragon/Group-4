@@ -192,12 +192,26 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
     }
 }
 
-/*int main()
+// Resource Utilization function to display the number of reservations for each resource.
+void ResourceUtilization(const list<Reservation> &reservations, vector<Resource> &resources)
 {
-    // Creates a example reservation
-    Reservation reservation1(1, 2, "Kaden");
 
-    // Displays the sample reservation
-    displayReservation(reservation1);
-}
-*/
+    cout << endl;
+
+    cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+    cout << left << setfill(' ') << setw(12) << "|Resource ID" << setw(22) << "|Resource Name" << setw(15) << "|Reservations" << "|" << endl;
+    cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+
+    for (const Resource &resource : resources)
+    {
+        int reservationCount = 0;
+        for (const Reservation &reservation : reservations)
+        {
+            if (reservation.GetResourceId() == resource.GetId())
+            {
+                reservationCount++;
+            }
+        }
+        cout << "|" << left << setfill(' ') << setw(11) << "|" << resource.GetId() << setw(21) << "|" << resource.GetName() << setw(14) << "|" << reservationCount << "|" << endl;
+        cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+    }
