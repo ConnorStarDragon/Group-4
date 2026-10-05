@@ -7,12 +7,16 @@
 
 using namespace std;
 
-bool CaseInsensitiveCompare(const string& str1, const string& str2){
-    if (str1.length() != str2.length()) {
+bool CaseInsensitiveCompare(const string &str1, const string &str2)
+{
+    if (str1.length() != str2.length())
+    {
         return false;
     }
-    for (int i = 0; i < str1.length(); ++i) {
-        if (tolower(str1[i]) != tolower(str2[i])) {
+    for (int i = 0; i < str1.length(); ++i)
+    {
+        if (tolower(str1[i]) != tolower(str2[i]))
+        {
             return false;
         }
     }
@@ -35,31 +39,37 @@ void Reservation::DisplayReservation() const
 }
 
 // displays a found reservation in a formatted table
-void DisplayFoundReservation(const vector<IndexReservation>& found) {
+void DisplayFoundReservation(const vector<IndexReservation> &found)
+{
     cout << "+" << right << setw(15) << setfill('-') << "+" << setw(11) << "+" << setw(20) << "+" << setw(12) << "+" << setw(12) << "+" << endl;
-    cout << left << setw(15) << setfill(' ') << "|reservationId" << setw(11) << "|studentId"<< setw(20) << "|studentName" << setw(12) << "|resourceId" << setw(12) << "|date" << "|" << endl;
+    cout << left << setw(15) << setfill(' ') << "|reservationId" << setw(11) << "|studentId" << setw(20) << "|studentName" << setw(12) << "|resourceId" << setw(12) << "|date" << "|" << endl;
     cout << "+" << right << setw(15) << setfill('-') << "+" << setw(11) << "+" << setw(20) << "+" << setw(12) << "+" << setw(12) << "+" << endl;
-    for (const auto& r : found) {
-        cout <<"|"  << left<<setw(14)<<setfill(' ')<<r.reservationId<<"|"<<setw(10)<<r.studentId<<"|"<<setw(19)<<r.studentName<<"|"<<setw(11)<<r.resourceId<<"|"<<setw(11)<<r.date<<"|"<<endl;
+    for (const auto &r : found)
+    {
+        cout << "|" << left << setw(14) << setfill(' ') << r.reservationId << "|" << setw(10) << r.studentId << "|" << setw(19) << r.studentName << "|" << setw(11) << r.resourceId << "|" << setw(11) << r.date << "|" << endl;
         cout << "+" << right << setw(15) << setfill('-') << "+" << setw(11) << "+" << setw(20) << "+" << setw(12) << "+" << setw(12) << "+" << endl;
     }
 }
 
 // Accessor functions
 int Reservation::GetReservationId() const { return reservationId; }
-const string& Reservation::GetResourceId() const { return resourceId; }
-const string& Reservation::GetStudentName() const { return studentName; }
+const string &Reservation::GetResourceId() const { return resourceId; }
+const string &Reservation::GetStudentName() const { return studentName; }
 int Reservation::GetStudentId() const { return studentId; }
-const string& Reservation::GetDate() const { return date; }
+const string &Reservation::GetDate() const { return date; }
 
-void FindReservation(const list<Reservation>& reservations, vector<IndexReservation>& found, int query) {
-    //bool for if its the first found item or not
+void FindReservation(const list<Reservation> &reservations, vector<IndexReservation> &found, int query)
+{
+    // bool for if its the first found item or not
     bool firstFound = true;
-    //search using reservation ID
-    if (query < 1000 && query > 0){
+    // search using reservation ID
+    if (query < 1000 && query > 0)
+    {
         list<Reservation>::const_iterator it = reservations.begin();
-        while (it != reservations.end()) {
-            if (it->GetReservationId() == query){
+        while (it != reservations.end())
+        {
+            if (it->GetReservationId() == query)
+            {
                 IndexReservation foundReservation;
                 foundReservation.reservationId = it->GetReservationId();
                 foundReservation.resourceId = it->GetResourceId();
@@ -70,20 +80,25 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
                 it++;
                 firstFound = false;
             }
-            else{
+            else
+            {
                 it++;
             }
-    }
-        if (firstFound){
+        }
+        if (firstFound)
+        {
             cout << "Error: Reservation ID not found." << endl;
-			found.push_back(IndexReservation{0, "", "", 0, ""});
+            found.push_back(IndexReservation{0, "", "", 0, ""});
         }
     }
-    //search using student ID
-    else if (query >= 1000 && query < 10000){
+    // search using student ID
+    else if (query >= 1000 && query < 10000)
+    {
         list<Reservation>::const_iterator it = reservations.begin();
-        while (it != reservations.end()) {
-            if (it->GetStudentId() == query){
+        while (it != reservations.end())
+        {
+            if (it->GetStudentId() == query)
+            {
                 IndexReservation foundReservation;
                 foundReservation.reservationId = it->GetReservationId();
                 foundReservation.resourceId = it->GetResourceId();
@@ -94,30 +109,37 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
                 it++;
                 firstFound = false;
             }
-            else{
+            else
+            {
                 it++;
             }
         }
-        if (firstFound){
+        if (firstFound)
+        {
             cout << "Error: Student ID not found." << endl;
-			found.push_back(IndexReservation{0, "", "", 0, ""});
+            found.push_back(IndexReservation{0, "", "", 0, ""});
         }
-
     }
-    else{
+    else
+    {
         cout << "Error: Invalid query. Please enter a valid reservation ID or student ID." << endl;
         found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
     }
 }
-void FindReservation(const list<Reservation>& reservations, vector<IndexReservation>& found, const string& query) {
-    //bool for if its the first found item or not
+void FindReservation(const list<Reservation> &reservations, vector<IndexReservation> &found, const string &query)
+{
+    // bool for if its the first found item or not
     bool firstFound = true;
-    //search using student name
-    if (isalpha(query[0])){
-        if (isalpha(query[1])){
+    // search using student name
+    if (isalpha(query[0]))
+    {
+        if (isalpha(query[1]))
+        {
             list<Reservation>::const_iterator it = reservations.begin();
-            while (it != reservations.end()) {
-                if (CaseInsensitiveCompare(it->GetStudentName(), query)){
+            while (it != reservations.end())
+            {
+                if (CaseInsensitiveCompare(it->GetStudentName(), query))
+                {
                     IndexReservation foundReservation;
                     foundReservation.reservationId = it->GetReservationId();
                     foundReservation.resourceId = it->GetResourceId();
@@ -128,21 +150,26 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
                     ++it;
                     firstFound = false;
                 }
-                else{
+                else
+                {
                     ++it;
                 }
             }
-            if (firstFound){
-                    cout << "Error: Student name not found." << endl;
-                    found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
+            if (firstFound)
+            {
+                cout << "Error: Student name not found." << endl;
+                found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
             }
         }
-        //search using resource ID
-        else{
+        // search using resource ID
+        else
+        {
             list<Reservation>::const_iterator it = reservations.begin();
-            while (it != reservations.end()) {
-                
-                if (CaseInsensitiveCompare(it->GetResourceId(), query)){
+            while (it != reservations.end())
+            {
+
+                if (CaseInsensitiveCompare(it->GetResourceId(), query))
+                {
                     IndexReservation foundReservation;
                     foundReservation.reservationId = it->GetReservationId();
                     foundReservation.resourceId = it->GetResourceId();
@@ -153,21 +180,26 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
                     ++it;
                     firstFound = false;
                 }
-                else{
+                else
+                {
                     ++it;
                 }
             }
-            if (firstFound){
+            if (firstFound)
+            {
                 cout << "Error: Resource ID not found." << endl;
                 found.push_back(IndexReservation{0, query, "", 0, ""}); // Return an empty IndexReservation to indicate not found
             }
-}
+        }
     }
-    //search using date
-    else if(query[2] == '/'){
+    // search using date
+    else if (query[2] == '/')
+    {
         list<Reservation>::const_iterator it = reservations.begin();
-        while (it != reservations.end()) {
-            if (it->GetDate() == query){
+        while (it != reservations.end())
+        {
+            if (it->GetDate() == query)
+            {
                 IndexReservation foundReservation;
                 foundReservation.reservationId = it->GetReservationId();
                 foundReservation.resourceId = it->GetResourceId();
@@ -179,27 +211,45 @@ void FindReservation(const list<Reservation>& reservations, vector<IndexReservat
                 ++it;
                 firstFound = false;
             }
-            else{
+            else
+            {
                 ++it;
-            }       
+            }
         }
-        if (firstFound){
+        if (firstFound)
+        {
             cout << "Error: Date not found." << endl;
             found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
         }
     }
-    else{
+    else
+    {
         cout << "Error: Invalid query. Please enter a valid resource ID or student name." << endl;
         found.push_back(IndexReservation{0, "", "", 0, ""}); // Return an empty IndexReservation to indicate not found
     }
 }
 
-/*int main()
+// Resource Utilization function to display the number of reservations for each resource
+void ResourceUtilization(const list<Reservation> &reservations, vector<Resource> &resources)
 {
-    // Creates a example reservation
-    Reservation reservation1(1, 2, "Kaden");
 
-    // Displays the sample reservation
-    displayReservation(reservation1);
+    cout << endl;
+
+    cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+    cout << left << setfill(' ') << setw(12) << "|Resource ID" << setw(22) << "|Resource Name" << setw(15) << "|Reservations" << "|" << endl;
+    cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+
+    for (const Resource &resource : resources)
+    {
+        int reservationCount = 0;
+        for (const Reservation &reservation : reservations)
+        {
+            if (reservation.GetResourceId() == resource.GetId())
+            {
+                reservationCount++;
+            }
+        }
+        cout << "|" << left << setfill(' ') << setw(11) << "|" << resource.GetId() << setw(21) << "|" << resource.GetName() << setw(14) << "|" << reservationCount << "|" << endl;
+        cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
+    }
 }
-*/
