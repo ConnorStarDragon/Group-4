@@ -229,7 +229,7 @@ void FindReservation(const list<Reservation> &reservations, vector<IndexReservat
     }
 }
 
-// Resource Utilization function to display the number of reservations for each resource
+// Resource Utilization function to display the number of reservations for each resource.
 void ResourceUtilization(const list<Reservation> &reservations, vector<Resource> &resources)
 {
 
