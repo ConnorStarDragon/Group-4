@@ -252,3 +252,45 @@ void CancelationStack::Undo(vector<ReservationQueue>& queues, list<Reservation>&
 
     c.pop();
 }
+// Waiting-List Statistics Report       
+void WaitingListStatistics(const vector<ReservationQueue>& queues) {
+
+    cout << endl;
+    cout << "==================== WAITING-LIST STATISTICS ====================" << endl;
+
+    cout << "+" << right << setw(12) << setfill('-') << "+" 
+         << setw(22) << "+" << setw(15) << "+" << endl;
+
+    cout << left << setw(12) << setfill(' ') << "|Resource ID"
+         << setw(22) << "|Resource Name"
+         << setw(15) << "|Students Waiting" << "|" << endl;
+
+    cout << "+" << right << setw(12) << setfill('-') << "+" 
+         << setw(22) << "+" << setw(15) << "+" << endl;
+
+    for (const ReservationQueue& rq : queues) {
+
+        queue<Reservation> temp = rq.GetQueue();
+        int count = 0;
+
+        // Count students waiting (queue size minus 1 active reservation)
+        while (!temp.empty()) {
+            temp.pop();
+            count++;
+        }
+
+        // If queue has at least 1 reservation, the first is active, rest are waiting
+        if (count > 0) {
+            count -= 1;
+        }
+
+        Resource r = rq.GetResource();
+
+        cout << "|" << left << setw(11) << setfill(' ') << r.GetId()
+             << "|" << setw(21) << r.GetName()
+             << "|" << setw(14) << count << "|" << endl;
+
+        cout << "+" << right << setw(12) << setfill('-') << "+" 
+             << setw(22) << "+" << setw(15) << "+" << endl;
+    }
+}
