@@ -253,3 +253,37 @@ void ResourceUtilization(const list<Reservation> &reservations, vector<Resource>
         cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
     }
 }
+
+// Active Reservations Report 
+void ActiveReservationsReport(const list<Reservation>& reservations) {
+
+    cout << endl;
+    cout << "==================== ACTIVE RESERVATIONS REPORT ====================" << endl;
+
+    cout << "+" << right << setw(15) << setfill('-') << "+" 
+         << setw(11) << "+" << setw(20) << "+" 
+         << setw(12) << "+" << setw(12) << "+" << endl;
+
+    cout << left << setw(15) << setfill(' ') << "|reservationId"
+         << setw(11) << "|studentId"
+         << setw(20) << "|studentName"
+         << setw(12) << "|resourceId"
+         << setw(12) << "|date" << "|" << endl;
+
+    cout << "+" << right << setw(15) << setfill('-') << "+" 
+         << setw(11) << "+" << setw(20) << "+" 
+         << setw(12) << "+" << setw(12) << "+" << endl;
+
+    for (const Reservation& r : reservations) {
+        cout << "|" << left << setw(14) << setfill(' ') << r.GetReservationId()
+             << "|" << setw(10) << r.GetStudentId()
+             << "|" << setw(19) << r.GetStudentName()
+             << "|" << setw(11) << r.GetResourceId()
+             << "|" << setw(11) << r.GetDate() << "|" << endl;
+
+        cout << "+" << right << setw(15) << setfill('-') << "+" 
+             << setw(11) << "+" << setw(20) << "+" 
+             << setw(12) << "+" << setw(12) << "+" << endl;
+    }
+}
+
