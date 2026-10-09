@@ -185,7 +185,8 @@ int main(){
         cout << "5. Add a reservation" << endl;
         cout << "6. Cancel a reservation" << endl;
         cout << "7. Check a reservation Queue" << endl;
-        cout << "8. Exit the program" << endl;
+        cout << "8. System reports" << endl;
+		cout << "9. Exit the program" << endl;
         if (canceled){
             cout << "0. Undo reservation cancelation" << endl;
         }
@@ -234,10 +235,28 @@ int main(){
 
                 break;
             }
-            case 8:
+            case 8:{
+                cout << "1. Active Reservations Report" << endl;
+                cout << "2. Waiting-List Statistics" << endl;
+                int reportChoice;
+                cin >> reportChoice;
+                switch (reportChoice) {
+                    case 1:
+                        ActiveReservationsReport(reservations);
+                        break;
+                    case 2:
+                        WaitingListStatistics(reservationQueues);
+                        break;
+                    default:
+                        cout << "Invalid choice." << endl;
+                }
+                break;
+			}
+            case 9:{
                 cout << "Exiting the program." << endl;
                 return 0;
                 break;
+            }
             case 0:
                 if (canceled){
                     cancelations.Undo(reservationQueues, reservations, canceledIndex);
