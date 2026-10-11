@@ -258,19 +258,20 @@ void ResourceUtilization(const list<Reservation> &reservations, vector<Resource>
             }
         }
         // Display the resource ID, name, and total reservations
-        cout << "|"  << left << setfill(' ') << setw(11) << resource.GetId() << "|" << setw(21) << resource.GetName() << "|" << setw(14) << reservationCount << "|" << endl;
+        cout << "|" << left << setfill(' ') << setw(11) << resource.GetId() << "|" << setw(21) << resource.GetName() << "|" << setw(14) << reservationCount << "|" << endl;
         cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
     }
 }
 
-// Active Reservations Report 
-void ActiveReservationsReport(const list<Reservation>& reservations) {
+// Active Reservations Report
+void ActiveReservationsReport(const list<Reservation> &reservations)
+{
 
     cout << endl;
     cout << "==================== ACTIVE RESERVATIONS REPORT ====================" << endl;
 
-    cout << "+" << right << setw(15) << setfill('-') << "+" 
-         << setw(11) << "+" << setw(20) << "+" 
+    cout << "+" << right << setw(15) << setfill('-') << "+"
+         << setw(11) << "+" << setw(20) << "+"
          << setw(12) << "+" << setw(12) << "+" << endl;
 
     cout << left << setw(15) << setfill(' ') << "|reservationId"
@@ -279,20 +280,95 @@ void ActiveReservationsReport(const list<Reservation>& reservations) {
          << setw(12) << "|resourceId"
          << setw(12) << "|date" << "|" << endl;
 
-    cout << "+" << right << setw(15) << setfill('-') << "+" 
-         << setw(11) << "+" << setw(20) << "+" 
+    cout << "+" << right << setw(15) << setfill('-') << "+"
+         << setw(11) << "+" << setw(20) << "+"
          << setw(12) << "+" << setw(12) << "+" << endl;
 
-    for (const Reservation& r : reservations) {
+    for (const Reservation &r : reservations)
+    {
         cout << "|" << left << setw(14) << setfill(' ') << r.GetReservationId()
              << "|" << setw(10) << r.GetStudentId()
              << "|" << setw(19) << r.GetStudentName()
              << "|" << setw(11) << r.GetResourceId()
              << "|" << setw(11) << r.GetDate() << "|" << endl;
 
-        cout << "+" << right << setw(15) << setfill('-') << "+" 
-             << setw(11) << "+" << setw(20) << "+" 
+        cout << "+" << right << setw(15) << setfill('-') << "+"
+             << setw(11) << "+" << setw(20) << "+"
              << setw(12) << "+" << setw(12) << "+" << endl;
     }
 }
 
+void MostRequestedResources(const list<Reservation> &reservations, const vector<Resource> &resources)
+{
+    // Store resource and it's count
+    vector<pair<Resource, int>> requestedResources;
+
+    for (const Resource &resource : resources)
+    {
+
+        int reservationCount = 0;
+
+        for (const Reservation &reservation : reservations)
+        {
+            if (reservation.GetResourceId() == resource.GetId())
+            {
+                reservationCount++;
+            }
+        }
+        requestedResources.push_back(make_pair(resource, reservationCount));
+    }
+
+    // Using a Bubble sort to sort the resources based on the number of reservations in descending order
+    for (size_t i = 0; i < requestedResources.size(); ++i)
+    {
+        for (size_t j = 0; j + 1 < requestedResources.size() - i - 1; ++j)
+        {
+            // Compare the reservation count and sort by resource id if the same
+            if (requestedResources[j].second < requestedResources[j + 1].second || (requestedResources[j].second == requestedResources[j + 1].second && requestedResources[j].first.GetId() > requestedResources[j + 1].first.GetId()))
+            {
+                pair<Resource, int> temp = requestedResources[j];
+                requestedResources[j] = requestedResources[j + 1];
+                requestedResources[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << endl;
+    cout << "==================== MOST REQUESTED RESOURCES REPORT ====================" << endl;
+
+    // Display the table header/border
+    cout << "+" << right << setw(8) << setfill('-') << "+"
+         << setw(15) << "+"
+         << setw(25) << "+"
+         << setw(15) << "+" << endl;
+
+    cout << left << setfill(' ')
+         << setw(8) << "|Rank"
+         << setw(15) << "|Resource ID"
+         << setw(25) << "|Resource Name"
+         << setw(15) << "|Reservations" << "|" << endl;
+
+    cout << "+" << right << setw(8) << setfill('-') << "+"
+         << setw(15) << "+"
+         << setw(25) << "+"
+         << setw(15) << "+" << endl;
+
+    int rank = 1;
+
+    // Display the most requested resources in a formatted table
+    for (const auto &resourcePair : requestedResources)
+    {
+        cout << "|" << left << setfill(' ')
+             << setw(7) << rank
+             << "|" << setw(14) << resourcePair.first.GetId()
+             << "|" << setw(24) << resourcePair.first.GetName()
+             << "|" << setw(14) << resourcePair.second << "|" << endl;
+
+        cout << "+" << right << setw(8) << setfill('-') << "+"
+             << setw(15) << "+"
+             << setw(25) << "+"
+             << setw(15) << "+" << endl;
+
+        rank++;
+    }
+}
