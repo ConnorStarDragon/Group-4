@@ -238,6 +238,7 @@ int main(){
             case 8:{
                 cout << "1. Active Reservations Report" << endl;
                 cout << "2. Waiting-List Statistics" << endl;
+				cout << "3. Resource Utilization Report" << endl;
                 int reportChoice;
                 cin >> reportChoice;
                 switch (reportChoice) {
@@ -247,6 +248,8 @@ int main(){
                     case 2:
                         WaitingListStatistics(reservationQueues);
                         break;
+					case 3: 
+						ResourceUtilization(reservations, resources);
                     default:
                         cout << "Invalid choice." << endl;
                 }
