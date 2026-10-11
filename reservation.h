@@ -60,4 +60,6 @@ void ActiveReservationsReport(const list<Reservation>& reservations);           
 // Displays the number of reservations associated with each resource
 void ResourceUtilization(const list<Reservation>& reservations, vector<Resource>& resources);
 
+void MostRequestedResources(const list<Reservation>& reservations, const vector<Resource>& resources);
+
 #endif
