@@ -14,39 +14,70 @@
 using namespace std;
 
 
-ReservationQueue::ReservationQueue(vector<IndexReservation> reservations){
-    auto dateKey = [](const string& date) {
-        return date.substr(6, 4) + date.substr(0, 2) + date.substr(3, 2);
-    };
+namespace {
+string reservationDateKey(const string& date) {
+    return date.substr(6, 4) + date.substr(0, 2) + date.substr(3, 2);
+}
 
-    while (!reservations.empty()) {
-        auto earliest = reservations.begin();
-        for (auto current = next(earliest); current != reservations.end(); ++current) {
-            if (current->date.empty()) {
-                continue;
-            }
-            if (earliest->date.empty()) {
-                earliest = current;
-                continue;
-            }
-            if (dateKey(current->date) < dateKey(earliest->date)) {
-                earliest = current;
-            }
+bool reservationComesBefore(const IndexReservation& left, const IndexReservation& right) {
+    if (left.date.empty()) {
+        return false;
+    }
+    if (right.date.empty()) {
+        return true;
+    }
+    return reservationDateKey(left.date) < reservationDateKey(right.date);
+}
+
+void mergeSortReservations(vector<IndexReservation>& reservations,
+                           vector<IndexReservation>& scratch,
+                           size_t begin,
+                           size_t end) {
+    if (end - begin < 2) {
+        return;
+    }
+
+    const size_t middle = begin + (end - begin) / 2;
+    mergeSortReservations(reservations, scratch, begin, middle);
+    mergeSortReservations(reservations, scratch, middle, end);
+
+    size_t left = begin;
+    size_t right = middle;
+    size_t output = begin;
+    while (left < middle && right < end) {
+        if (reservationComesBefore(reservations[right], reservations[left])) {
+            scratch[output++] = reservations[right++];
+        } else {
+            scratch[output++] = reservations[left++];
         }
+    }
+    while (left < middle) {
+        scratch[output++] = reservations[left++];
+    }
+    while (right < end) {
+        scratch[output++] = reservations[right++];
+    }
+    for (size_t i = begin; i < end; ++i) {
+        reservations[i] = scratch[i];
+    }
+}
+}
 
-        if (earliest->date.empty()) {
-            reservations.erase(earliest);
+ReservationQueue::ReservationQueue(vector<IndexReservation> reservations){
+    vector<IndexReservation> scratch(reservations.size());
+    mergeSortReservations(reservations, scratch, 0, reservations.size());
+
+    for (const IndexReservation& reservation : reservations) {
+        if (reservation.date.empty()) {
             continue;
         }
-
         q.push(Reservation(
-            earliest->reservationId,
-            earliest->resourceId,
-            earliest->studentName,
-            earliest->studentId,
-            earliest->date
+            reservation.reservationId,
+            reservation.resourceId,
+            reservation.studentName,
+            reservation.studentId,
+            reservation.date
         ));
-        reservations.erase(earliest);
     }
 }
 
