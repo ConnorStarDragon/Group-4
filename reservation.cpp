@@ -235,21 +235,30 @@ void ResourceUtilization(const list<Reservation> &reservations, vector<Resource>
 
     cout << endl;
 
+    cout << "=========== RESOURCE UTILIZATION REPORT ==========" << endl;
+
+    // Display the report's table headers
     cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
     cout << left << setfill(' ') << setw(12) << "|Resource ID" << setw(22) << "|Resource Name" << setw(15) << "|Reservations" << "|" << endl;
     cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
 
+    // GO through every resource in the system
     for (const Resource &resource : resources)
     {
+        // Start the reservation count at zero for each resource
         int reservationCount = 0;
+
+        // Check each reservation to see if it belongs to this resource
         for (const Reservation &reservation : reservations)
         {
+            // Increase the count when the resource IDs match
             if (reservation.GetResourceId() == resource.GetId())
             {
                 reservationCount++;
             }
         }
-        cout << "|" << left << setfill(' ') << setw(11) << "|" << resource.GetId() << setw(21) << "|" << resource.GetName() << setw(14) << "|" << reservationCount << "|" << endl;
+        // Display the resource ID, name, and total reservations
+        cout << "|"  << left << setfill(' ') << setw(11) << resource.GetId() << "|" << setw(21) << resource.GetName() << "|" << setw(14) << reservationCount << "|" << endl;
         cout << "+" << right << setw(12) << setfill('-') << "+" << setw(22) << "+" << setw(15) << "+" << endl;
     }
 }
