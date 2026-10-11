@@ -56,4 +56,8 @@ void FindReservation(const list<Reservation> &reservations, vector<IndexReservat
 void DisplayFoundReservation(const vector<IndexReservation> &found);                                               // Displays a found reservation in a formatted table
 bool CaseInsensitiveCompare(const string &str1, const string &str2);                                               // Compares two strings without case sensitivity, important for searching for reservations by student name or resource ID
 void ActiveReservationsReport(const list<Reservation>& reservations);                                              // Displays Active reservation report. 
+
+// Displays the number of reservations associated with each resource
+void ResourceUtilization(const list<Reservation>& reservations, vector<Resource>& resources);
+
 #endif
