@@ -283,6 +283,48 @@ void CancelationStack::Undo(vector<ReservationQueue>& queues, list<Reservation>&
 
     c.pop();
 }
+
+void CancelationStack::ShowCancelations(){
+    if (c.empty()) {
+       cout << "No recent cancelations." << endl;
+       return;
+    }
+
+    stack<Reservation> temp = c;
+
+    cout << endl;
+    cout << "==================== RECENT CANCELLATIONS ====================" << endl;
+
+    cout << "+" << right << setw(15) << setfill('-') << "+"
+        << setw(11) << "+" << setw(20) << "+"
+        << setw(12) << "+" << setw(12) << "+" << endl;
+
+    cout << left << setw(15) << setfill(' ') << "|reservationId"
+        << setw(11) << "|studentId"
+        << setw(20) << "|studentName"
+        << setw(12) << "|resourceId"
+        << setw(12) << "|date" << "|" << endl;
+
+    cout << "+" << right << setw(15) << setfill('-') << "+"
+        << setw(11) << "+" << setw(20) << "+"
+        << setw(12) << "+" << setw(12) << "+" << endl;
+
+    while (!temp.empty()) {
+       Reservation r = temp.top();
+       temp.pop();
+
+       cout << "|" << left << setw(14) << setfill(' ') << r.GetReservationId()
+           << "|" << setw(10) << r.GetStudentId()
+           << "|" << setw(19) << r.GetStudentName()
+           << "|" << setw(11) << r.GetResourceId()
+           << "|" << setw(11) << r.GetDate() << "|" << endl;
+
+       cout << "+" << right << setw(15) << setfill('-') << "+"
+           << setw(11) << "+" << setw(20) << "+"
+           << setw(12) << "+" << setw(12) << "+" << endl;
+    }
+}
+
 // Waiting-List Statistics Report       
 void WaitingListStatistics(const vector<ReservationQueue>& queues) {
 
