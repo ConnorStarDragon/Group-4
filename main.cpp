@@ -8,14 +8,12 @@
 #include <iomanip>
 #include <sstream>
 #include <cctype>
-#include <chrono>
-#include <thread>
 #include "reservation.h"
 #include "resource.h"
 #include "reservationfunctions.h"
 
 using namespace std;
-using namespace std::chrono_literals;
+
 
 
 // Function to display all reservations in a list
@@ -40,6 +38,7 @@ void DisplayResources(const vector<Resource>& r) {
     }
 }
 
+//searches and displays all reservations from a query
 void SearchReservations(const list<Reservation>& reservations, vector<IndexReservation>& found) {
     string query;
     int intval;
@@ -61,6 +60,7 @@ void SearchReservations(const list<Reservation>& reservations, vector<IndexReser
 	found.clear();
 }
 
+//searches and displays all reservations from one or multiple queries
 void SearchResources(const vector<Resource>& resources, vector<IndexResource>& found) {
     string query;
     cout << "Enter a resource ID, resource name, resource type, or availability(available/not available) to search for a resource.\n seperate multiple queries with a comma: ";
@@ -81,9 +81,11 @@ void SearchResources(const vector<Resource>& resources, vector<IndexResource>& f
 
 int main(){
 
+    //opens files
     ifstream reservationIn("reservations.txt");
     ifstream resourceIn("resources.txt");
 
+    //checks if files opened properly
     if (!reservationIn.is_open()){
         cout << "Error: could not open \"reservations.txt\"" << endl;
         return 1;
@@ -111,6 +113,7 @@ int main(){
         reservations.push_back(r);
     }
 
+    
     int resIdIndex = reservations.back().GetReservationId();
 
     //creat vector of resources
