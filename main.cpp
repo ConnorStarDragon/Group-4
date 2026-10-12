@@ -254,6 +254,7 @@ int main()
             cout << "2. Waiting-List Statistics" << endl;
             cout << "3. Resource Utilization Report" << endl;
             cout << "4. Most Requested Resources" << endl;
+            cout << "5. Recent Cancellations" << endl;
             int reportChoice;
             cin >> reportChoice;
             switch (reportChoice)
@@ -269,6 +270,9 @@ int main()
                 break;
             case 4:
                 MostRequestedResources(reservations, resources);
+                break;
+            case 5:
+                cancelations.ShowCancelations();
                 break;
             default:
                 cout << "Invalid choice." << endl;

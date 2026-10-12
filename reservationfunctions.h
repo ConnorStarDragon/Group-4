@@ -37,6 +37,7 @@ class CancelationStack{
     public:
         void Cancel(vector<ReservationQueue>& queues, list<Reservation>& reservations, int& canceledIndex);
         void Undo(vector<ReservationQueue>& queues, list<Reservation>& reservations, int i);
+        void ShowCancelations();
 };
 //waiting list statistics
 void WaitingListStatistics(const vector<ReservationQueue>& queues);
