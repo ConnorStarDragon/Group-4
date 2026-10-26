@@ -168,9 +168,6 @@ int main()
 
     CancelationStack cancelations;
 
-    // determines if a reservation has recently been deleted
-    bool canceled = false;
-    int canceledIndex;
 
     // system("cls");
 
@@ -195,7 +192,7 @@ int main()
         cout << "7. Check a reservation Queue" << endl;
         cout << "8. System reports" << endl;
         cout << "9. Exit the program" << endl;
-        if (canceled)
+        if (cancelations.CanUndo())
         {
             cout << "0. Undo reservation cancelation" << endl;
         }
@@ -217,35 +214,20 @@ int main()
             SearchResources(resources, foundResource);
             break;
         case 5:
-        {
-            cout << "Enter resource ID of the resource you want to reserve" << endl;
-            string id;
-            cin.ignore();
-            cin >> id;
-            int queueIndex = GetQueueIndex(reservationQueues, id);
-            if (queueIndex == -1)
-            {
-                cout << "Error: Resource ID not found." << endl;
-                break;
-            }
-            Reservation added = reservationQueues[queueIndex].AddReservation(resIdIndex);
-            reservations.push_back(added);
+            AddReservationFlow(reservationQueues, reservations, resIdIndex);
             break;
-        }
         case 6:
-            cancelations.Cancel(reservationQueues, reservations, canceledIndex);
-            canceled = true;
+            cancelations.Cancel(reservationQueues, reservations);
             break;
         case 7:
         {
             cout << "Enter resource ID: ";
             string id;
             cin >> id;
-            vector<IndexReservation> unsortedQueue;
-            FindReservation(reservations, unsortedQueue, id);
-            ReservationQueue q(unsortedQueue);
-            q.DisplayQueue();
-
+            int idx = GetQueueIndex(reservationQueues, id);
+            if (idx == -1) { cout << "Error: Resource ID not found." << endl; break; }
+            reservationQueues[idx].DisplayQueue();
+            reservationQueues[idx].DisplayWaiting();
             break;
         }
         case 8:
@@ -286,16 +268,15 @@ int main()
             break;
         }
         case 0:
-            if (canceled)
-            {
-                cancelations.Undo(reservationQueues, reservations, canceledIndex);
-                canceled = false;
+            if (cancelations.CanUndo()) {
+                cancelations.Undo(reservationQueues, reservations);
                 break;
             }
         default:
-            cout << "Invalid input. Please enter a number between 1 and 7." << endl;
+            cout << "Invalid input. Please enter a single digit number." << endl;
         }
     }
 
     return 0;
 }
+
